@@ -1,0 +1,1920 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>Verben Investments LTD | Computer Accessories & Office Supplies</title>
+    <link rel="icon" type="image/png" href="assets/Verben_Logo.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --deep-blue-1: #00BFFF;
+            --deep-blue-2: #0790E8;
+            --deep-blue-3: #0E61D1;
+            --deep-blue-4: #1432BA;
+            --deep-blue-5: #1B03A3;
+            --light: #ffffff;
+            --dark: rgba(14, 29, 58, 0.767);
+            --gray: #f8f9fa;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            --transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            --glass: rgba(255, 255, 255, 0.1);
+            --glass-border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', system-ui, -apple-system, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--deep-blue-5), var(--deep-blue-3));
+            color: var(--dark);
+            line-height: 1.7;
+            overflow-x: hidden;
+            background-attachment: fixed;
+        }
+
+        ::selection {
+            background: var(--deep-blue-2);
+            color: white;
+        }
+
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--gray);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--deep-blue-3);
+            border-radius: 5px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1120px; 
+            margin: 0 auto;
+            padding: 0 16px; 
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px; 
+            padding: 11px 22px; 
+            border-radius: 40px; 
+            font-size: 1rem; 
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            text-decoration: none;
+            background: var(--deep-blue-2);
+            color: white;
+            box-shadow: 0 4px 15px rgba(7, 144, 232, 0.3);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 100%;
+            background: var(--deep-blue-4);
+            transition: var(--transition);
+            z-index: -1;
+        }
+
+        .btn:hover::before {
+            width: 100%;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(7, 144, 232, 0.4);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--light);
+            border: 2px solid var(--light);
+            box-shadow: none;
+        }
+
+        .btn-outline::before {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2rem; 
+            margin-bottom: 48px; 
+            color: var(--deep-blue-4);
+            position: relative;
+            font-weight: 700;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -16px; 
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px; 
+            height: 4px; 
+            background: linear-gradient(to right, var(--deep-blue-2), var(--deep-blue-4));
+            border-radius: 5px;
+        }
+
+        /* Floating Table of Contents */
+        .toc {
+            position: fixed;
+            top: 50%;
+            right: 30px;
+            transform: translateY(-50%);
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: var(--glass-border);
+            border-radius: 15px;
+            padding: 20px;
+            z-index: 100;
+            display: none;
+            flex-direction: column;
+            gap: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .toc.active {
+            display: flex;
+            animation: fadeInUp 0.5s ease-out;
+        }
+
+        .toc-item {
+            color: white;
+            text-decoration: none;
+            padding: 8px 15px;
+            border-radius: 8px;
+            transition: var(--transition);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .toc-item i {
+            font-size: 0.7rem; 
+        }
+
+        .toc-item:hover, .toc-item.active {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(-5px);
+        }
+
+        .toc-toggle {
+            position: fixed;
+            top: 50%;
+            right: 20px;
+            transform: translateY(-50%);
+            background: var(--deep-blue-3);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem; 
+            cursor: pointer;
+            z-index: 101;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            transition: var(--transition);
+        }
+
+        .toc-toggle:hover {
+            background: var(--deep-blue-4);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        /* Header Styles */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: var(--glass-border);
+            z-index: 1000;
+            padding: 15px 0;
+            transition: var(--transition);
+        }
+
+        .header.scrolled {
+            padding: 10px 0;
+            box-shadow: var(--shadow);
+            background: rgba(14, 29, 58, 0.95);
+        }
+
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1.5rem; 
+            font-weight: 700;
+            color: var(--deep-blue-1);
+            text-decoration: none;
+        }
+
+        .logo i {
+            color: var(--deep-blue-2);
+            font-size: 1.8rem; 
+        }
+
+        .logo span {
+            color: rgb(112, 102, 253);
+            font-weight: 700;
+            font-size: 1rem; 
+        }
+
+        .logo img {
+            height: 24px; 
+            width: 24px;
+        }
+
+
+        .nav {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        .nav-list {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        .nav-link {
+            color: rgb(64, 51, 247);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 8px 0;
+            position: relative;
+            transition: var(--transition);
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--deep-blue-2);
+            transition: var(--transition);
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            background: transparent;
+            border: none;
+            color: var(--light);
+            font-size: 1.6rem; 
+            cursor: pointer;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            padding-top: 80px;
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('assets/Verben_Poster.jpg') no-repeat center center/cover;
+            color: white;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            background-size: 110%;
+            animation: panZoom 20s ease-in-out infinite alternate;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 50%, rgba(7, 144, 232, 0.3), transparent 70%);
+            z-index: 0;
+        }
+
+        .hero-content {
+            max-width: 720px; 
+            margin: 0 auto;
+            padding: 32px 16px; 
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-title {
+            font-size: 3rem; 
+            margin-bottom: 20px; 
+            line-height: 1.2;
+            font-weight: 800;
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .hero-subtitle {
+            font-size: 1.04rem; 
+            margin-bottom: 32px; 
+            opacity: 0.9;
+            animation: fadeInUp 1s ease-out 0.2s forwards;
+            opacity: 0;
+        }
+
+        .hero-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 16px; 
+            margin-top: 32px; 
+            animation: fadeInUp 1s ease-out 0.4s forwards;
+            opacity: 0;
+        }
+
+        /* Features Section */
+        .features {
+            padding: 96px 0; 
+            background: var(--light);
+            position: relative;
+        }
+
+        .features::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: linear-gradient(to bottom, rgba(248, 249, 250, 1), rgba(248, 249, 250, 0));
+            z-index: 1;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr); 
+            gap: 32px; 
+            position: relative;
+            z-index: 2;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 12px; 
+            padding: 32px 24px; 
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            transform: translateY(20px);
+            opacity: 0;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--deep-blue-2), var(--deep-blue-4));
+            transition: var(--transition);
+        }
+
+        .feature-card:hover::before {
+            width: 100%;
+            opacity: 0.1;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+
+        .feature-icon {
+            font-size: 2.7rem; 
+            color: var(--deep-blue-2);
+            margin-bottom: 20px; 
+            transition: var(--transition);
+        }
+
+        .feature-card:hover .feature-icon {
+            transform: scale(1.1);
+            color: var(--deep-blue-4);
+        }
+
+        .feature-title {
+            font-size: 1.12rem; 
+            margin-bottom: 16px; 
+            color: var(--deep-blue-4);
+            font-weight: 600;
+        }
+
+        .feature-text {
+            color: #555;
+        }
+
+        /* Products Section */
+        .products {
+            padding: 96px 0; 
+            background: linear-gradient(to bottom, var(--light), var(--gray));
+            position: relative;
+        }
+
+        .products::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: linear-gradient(to bottom, rgba(241, 243, 245, 1), rgba(241, 243, 245, 0));
+            z-index: 1;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr); 
+            gap: 24px; 
+            position: relative;
+            z-index: 2;
+        }
+
+        .product-card {
+            background: white;
+            border-radius: 12px; 
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+            position: relative;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+            height: 320px; 
+        }
+
+        .product-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+
+        .product-card:hover .product-card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .product-card-front, .product-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-card-back {
+            transform: rotateY(180deg);
+            background: var(--deep-blue-5);
+            color: white;
+            padding: 25px;
+            justify-content: center;
+        }
+
+        .product-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--deep-blue-2);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 50px;
+            font-size: 0.8rem; 
+            font-weight: 600;
+            z-index: 2;
+        }
+
+        .product-image-container {
+            height: 200px; 
+            overflow: hidden;
+            position: relative;
+        }
+
+        .product-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .product-card:hover .product-image {
+            transform: scale(1.05);
+        }
+
+        .product-content {
+            padding: 20px; 
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .product-category {
+            display: inline-block;
+            color: var(--deep-blue-2);
+            font-size: 0.8rem; 
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .product-title {
+            font-size: 0.96rem; 
+            margin-bottom: 10px;
+            color: var(--dark);
+            font-weight: 600;
+        }
+
+        .product-price {
+            font-size: 0.88rem; 
+            font-weight: 700;
+            color: var(--deep-blue-4);
+            margin-bottom: 16px; 
+        }
+
+        .product-price span {
+            font-size: 0.9rem; 
+            color: #777;
+            text-decoration: line-through;
+            margin-left: 5px;
+        }
+
+        .product-rating {
+            color: var(--deep-blue-2);
+            margin-bottom: 20px;
+            font-size: 0.8rem; 
+        }
+
+        .product-description {
+            font-size: 0.68rem; 
+            margin-bottom: 16px; 
+        }
+
+        /* Services Section */
+        .services {
+            padding: 96px 0; 
+            background: linear-gradient(135deg, var(--deep-blue-3), var(--deep-blue-5));
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .services::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.05) 0%, transparent 70%);
+            z-index: 1;
+        }
+
+        .services .section-title {
+            color: white;
+            position: relative;
+            z-index: 2;
+        }
+
+        .services .section-title::after {
+            background: linear-gradient(to right, var(--deep-blue-1), white);
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px; 
+            position: relative;
+            z-index: 2;
+        }
+
+        .service-card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: var(--glass-border);
+            border-radius: 12px; 
+            padding: 32px 24px; 
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            transform: translateY(20px);
+            opacity: 0;
+        }
+
+        .service-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--deep-blue-1), white);
+            transition: var(--transition);
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .service-card:hover::before {
+            width: 100%;
+            opacity: 0.1;
+        }
+
+        .service-icon {
+            font-size: 2.3rem; 
+            margin-bottom: 20px; 
+            color: white;
+            transition: var(--transition);
+        }
+
+        .service-card:hover .service-icon {
+            transform: scale(1.1);
+            color: var(--deep-blue-1);
+        }
+
+        .service-title {
+            font-size: 1.12rem; 
+            margin-bottom: 16px; 
+            font-weight: 600;
+        }
+
+        .service-text {
+            opacity: 0.9;
+        }
+
+        /* About Section */
+        .about {
+            padding: 96px 0; 
+            background: var(--light);
+            position: relative;
+        }
+
+        .about-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px; 
+            align-items: center;
+        }
+
+        .about-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .about-image {
+            position: relative;
+            border-radius: 12px; 
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            height: 400px; 
+        }
+
+        .about-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .about-image:hover img {
+            transform: scale(1.05);
+        }
+
+        .about-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px; 
+            margin-top: 32px; 
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 16px; 
+            background: white;
+            border-radius: 8px; 
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .stat-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-number {
+            font-size: 1.84rem; 
+            color: var(--deep-blue-4);
+            margin-bottom: 5px;
+            font-weight: 700;
+        }
+
+        .stat-item p {
+            color: #555;
+            font-size: 0.64rem; 
+        }
+
+        /* Contact Section */
+        .contact {
+            padding: 96px 0; 
+            background: var(--light);
+            position: relative;
+        }
+
+        .contact::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100px;
+            background: linear-gradient(to top, rgba(248, 249, 250, 1), rgba(248, 249, 250, 0));
+            z-index: 1;
+        }
+
+        .contact-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px; 
+            position: relative;
+            z-index: 2;
+        }
+
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+        }
+
+        .contact-icon {
+            font-size: 1.36rem; 
+            color: var(--deep-blue-2);
+            margin-top: 4px; 
+            transition: var(--transition);
+        }
+
+        .contact-item:hover .contact-icon {
+            transform: scale(1.1);
+            color: var(--deep-blue-4);
+        }
+
+        .contact-text h3 {
+            font-size: 0.96rem; 
+            margin-bottom: 8px; 
+            color: var(--deep-blue-4);
+            font-weight: 600;
+        }
+
+        .map-container {
+            height: 280px; 
+            border-radius: 12px; 
+            overflow: hidden;
+            margin-top: 24px; 
+            box-shadow: var(--shadow);
+        }
+
+        .map-container iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        .contact-form {
+            background: white;
+            padding: 32px; 
+            border-radius: 12px; 
+            box-shadow: var(--shadow);
+        }
+
+        .form-group {
+            margin-bottom: 20px; 
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px; 
+            font-weight: 600;
+            color: var(--deep-blue-4);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 16px; 
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 0.72rem;
+            transition: var(--transition);
+            background: #f8f9fa;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--deep-blue-2);
+            box-shadow: 0 0 0 3px rgba(110, 177, 219, 0.2);
+            background: white;
+        }
+
+        textarea.form-control {
+            min-height: 120px; 
+            resize: vertical;
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--dark);
+            color: white;
+            padding: 96px 0 24px; 
+            position: relative;
+            clip-path: polygon(0 10%, 100% 0, 100% 100%, 0 100%);
+        }
+
+        .footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 10px;
+            background: linear-gradient(to right, var(--deep-blue-1), var(--deep-blue-5));
+        }
+
+        .footer-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 32px;
+            margin-bottom: 40px;
+        }
+
+        .footer-col {
+            flex: 1 1 260px;
+            min-width: 240px;
+            max-width: 340px;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .footer-logo {
+            font-size: 1.44rem; 
+            font-weight: 700;
+            margin-bottom: 16px; 
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 8px; 
+        }
+
+        .footer-logo i {
+            color: var(--deep-blue-2);
+        }
+
+        .footer-about {
+            margin-bottom: 25px;
+            opacity: 0.8;
+            line-height: 1.8;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .social-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 45px;
+            height: 45px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: white;
+            transition: var(--transition);
+            font-size: 1.1rem; 
+        }
+
+        .social-link:hover {
+            background: var(--deep-blue-2);
+            transform: translateY(-5px);
+        }
+
+        .footer-title {
+            font-size: 0.96rem;
+            margin-bottom: 20px; 
+            color: white;
+            position: relative;
+            padding-bottom: 12px; 
+        }
+
+        .footer-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px; 
+            height: 2.4px; 
+            background: var(--deep-blue-2);
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-link {
+            margin-bottom: 12px; 
+        }
+
+        .footer-link a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .footer-link a i {
+            font-size: 0.7rem; 
+            transition: var(--transition);
+        }
+
+        .footer-link a:hover {
+            color: var(--deep-blue-2);
+            padding-left: 5px;
+        }
+
+        .footer-link a:hover i {
+            transform: translateX(5px);
+        }
+
+        .footer-contact-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px; 
+            margin-bottom: 16px; 
+        }
+
+        .footer-contact-icon {
+            color: var(--deep-blue-2);
+            margin-top: 4px; 
+            font-size: 0.88rem; 
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 24px; 
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            opacity: 0.7;
+            font-size: 0.64rem; 
+        }
+
+        /* Back to top button */
+        .back-to-top {
+            position: fixed;
+            bottom: 24px; 
+            right: 24px; 
+            width: 40px; 
+            height: 40px; 
+            background: var(--deep-blue-2);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.88rem; 
+            cursor: pointer;
+            z-index: 99;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.4s ease;
+            box-shadow: 0 4px 15px rgba(7, 144, 232, 0.3);
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .back-to-top:hover {
+            transform: translateY(-4px);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+            100% {
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes panZoom {
+            0% {
+                background-position: 50% 50%;
+                background-size: 110%;
+            }
+            100% {
+                background-position: 100% 50%;
+                background-size: 110%;
+            }
+        }
+
+        /* Responsive styles */
+        @media (max-width: 1200px) {
+            .hero-title {
+                font-size: 2.56rem; 
+            }
+            
+            .section-title {
+                font-size: 1.76rem; 
+            }
+        }
+
+        @media (max-width: 992px) {
+            .about-image {
+                height: 320px; 
+            }
+            
+            .about-container, .contact-container {
+                gap: 32px; 
+            }
+            
+            .toc {
+                right: 12px; 
+                padding: 12px; 
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 1.2rem; 
+            }
+            
+            .hero-subtitle {
+                font-size: 0.88rem; 
+            }
+            
+            .section-title {
+                font-size: 1.52rem; 
+            }
+            
+            .mobile-menu-btn {
+                font-size: 1.28rem; 
+            }
+            
+            .hero-buttons {
+                gap: 12px; 
+            }
+            
+            .btn {
+                font-size: 0.76rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .hero {
+                padding-top: 48px; 
+                min-height: 64vh; 
+            }
+
+            .hero-content {
+                padding: 16px 12px; 
+            }
+
+            .hero-title {
+                font-size: 1.2rem; 
+                margin-bottom: 12px; 
+            }
+
+            .hero-subtitle {
+                font-size: 0.72rem; 
+                margin-bottom: 20px; 
+            }
+
+            .btn {
+                padding: 8px 16px; 
+                font-size: 0.76rem;
+            }
+
+            .floating-whatsapp {
+                padding: 11px; 
+                right: 16px; 
+                bottom: 16px; 
+            }
+
+            .floating-whatsapp i {
+                font-size: 0.72rem; 
+            }
+        }
+        
+        @media (max-width: 768px) {
+          .hero {
+            animation: none !important;
+            background-position: center center;
+            background-size: cover;
+          }
+        }
+
+        @media (max-width: 768px) { 
+           .features-grid,
+           .products-grid {
+            grid-template-columns: 1fr; 
+            grid-template-rows: auto;
+         }
+        }
+
+        .feature-card,
+        .product-card {
+        padding: 16px; 
+        margin-bottom: 16px; 
+        }
+
+        .feature-text,
+        .product-description {
+        font-size: 0.8rem; 
+        }
+
+        /* Media query for mobile view */
+        @media (max-width: 768px) { 
+            .nav-link {
+            display: none; 
+         }
+        }
+
+
+        /* Floating WhatsApp button (mobile only) */
+        .floating-whatsapp-mobile {
+            display: none;
+            position: fixed;
+            bottom: 18px;
+            right: 18px;
+            z-index: 100;
+            background: #25d366;
+            color: #fff;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.25);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            transition: background 0.2s;
+        }
+
+        .floating-whatsapp-mobile:hover {
+            background: #128c7e;
+        }
+
+        @media (max-width: 768px) {
+            .floating-whatsapp-mobile {
+                display: flex;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .floating-whatsapp-mobile {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="https://wa.me/254722613844?text=Hi%20Verben%20Investments%2C%20I%E2%80%99m%20interested%20in%20your%20products." target="_blank" class="floating-whatsapp"><i class="fab fa-whatsapp"></i></a> 
+    <a href="https://wa.me/254722613844?text=Hi%20Verben%20Investments%2C%20I%E2%80%99m%20interested%20in%20your%20products." target="_blank" class="floating-whatsapp-mobile" title="Chat on WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+    
+    <!-- Back to top button -->
+    <div class="back-to-top" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+    
+    <!-- Floating Table of Contents -->
+    <div class="toc" id="toc">
+        <a href="#home" class="toc-item active" data-section="home">
+            <i class="fas fa-home"></i> Home
+        </a>
+        <a href="#features" class="toc-item" data-section="features">
+            <i class="fas fa-star"></i> Why Verben?
+        </a>
+        <div class="toc-summary" style="background:rgba(255,255,255,0.08); border-radius:10px; padding:12px; margin:10px 0; color:#fff; font-size:0.95em;">
+            <strong>Why Choose Verben:</strong>
+            <ul style="margin:8px 0 0 18px; padding:0; list-style:disc;">
+                <li>Quality Guaranteed: Only genuine, high-quality products with warranty.</li>
+                <li>Competitive Pricing: Best value and regular discounts.</li>
+                <li>Expert Support: Knowledgeable staff for all your needs.</li>
+                <li>Fast & Reliable Delivery: Quick, dependable service every time.</li>
+            </ul>
+        </div>
+        <a href="#products" class="toc-item" data-section="products">
+            <i class="fas fa-laptop"></i> Products
+        </a>
+        <a href="#services" class="toc-item" data-section="services">
+            <i class="fas fa-cogs"></i> Services
+        </a>
+        <a href="#about" class="toc-item" data-section="about">
+            <i class="fas fa-info-circle"></i> About
+        </a>
+        <a href="#contact" class="toc-item" data-section="contact">
+            <i class="fas fa-envelope"></i> Contact
+        </a>
+    </div>
+
+    <button class="toc-toggle" id="tocToggle" title="Why Choose Verben?">
+        <i class="fas fa-star"></i>
+    </button>
+
+    <!-- Header -->
+    <header class="header" id="header">
+        <div class="container header-container">
+            <a href="#home" class="logo">
+                <span style="
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                background: rgba(255, 255, 255, 0);
+                border-radius: 12px;
+                box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+                padding: 4px 18px;
+                height: 40px;
+                width: 40px;
+                overflow: hidden;
+                ">
+                <img src="assets/Verben_Logo.png" alt="Verben_Logo" style="height: 32px; width: 32px; object-fit: contain; border-radius: 8px;">
+                </span>
+                <span style="color: rgb(64, 51, 247); font-weight: 700; font-size: 1.5rem;">VERBEN INVESTMENTS LTD</span>
+            </a>
+                
+            <nav class="nav" id="nav">
+                <ul class="nav-list">
+                    <li><a href="#home" class="nav-link">Home</a></li>
+                    <li><a href="#features" class="nav-link">Why Us</a></li>
+                    <li><a href="#products" class="nav-link">Products</a></li>
+                    <li><a href="#services" class="nav-link">Services</a></li>
+                    <li><a href="#about" class="nav-link">About</a></li>
+                    <li><a href="#contact" class="nav-link">Contact</a></li>
+                </ul>
+            </nav>
+            
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="container hero-content">
+            <h1 class="hero-title">Toners, Cartridges & Office Solutions</h1>
+            <p class="hero-subtitle">Your trusted partner for original supplies, quality laptops, accessories, and comprehensive office solutions.</p>
+            <div class="hero-buttons">
+                <a href="#products" class="btn">
+                    <i class="fas fa-shopping-cart"></i> Explore Products
+                </a>
+                <a href="#contact" class="btn btn-outline">
+                    <i class="fas fa-phone-alt"></i> Get In Touch
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+            <div class="container">
+                <h2 class="section-title">Why Choose Verben</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h3 class="feature-title">Quality Guaranteed</h3>
+                        <p class="feature-text">We offer only genuine, high-quality electronics and office supplies with warranties for your peace of mind.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-tags"></i>
+                        </div>
+                        <h3 class="feature-title">Competitive Pricing</h3>
+                        <p class="feature-text">Get the best value for your money with our affordable prices and regular discounts.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-headset"></i>
+                        </div>
+                        <h3 class="feature-title">Expert Support</h3>
+                        <p class="feature-text">Our knowledgeable staff is always ready to assist you with product selection and after-sales support.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-shipping-fast"></i>
+                        </div>
+                        <h3 class="feature-title">Fast & Reliable Delivery</h3>
+                        <p class="feature-text">Enjoy quick and dependable delivery services, ensuring your orders reach you on time, every time.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    <section class="products" id="products">
+        <div class="container">
+            <h2 class="section-title">Featured Products</h2>
+            <div class="products-grid">
+                <div class="product-card">
+                    <div class="product-card-inner">
+                        <div class="product-card-front">
+                            <span class="product-badge">New</span>
+                            <div class="product-image-container">
+                                <img src="assets/laptops.jpg" alt="Laptops" class="product-image">
+                            </div>
+                            <div class="product-content">
+                                <span class="product-category">Laptops</span>
+                                <h3 class="product-title">HP, DELL & NEC Brands</h3>
+                                <div class="product-rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half-alt"></i>
+                                </div>
+                                <p class="product-price">KES 35,000 to KSh 52,000</p>
+                            </div>
+                        </div>
+                        <div class="product-card-back">
+                            <h3 class="product-title">Laptop Details</h3>
+                            <div class="product-description">
+                                <p>Latest models from top brands with warranty</p>
+                                <p>Custom configurations available</p>
+                                <p>Free delivery within Nairobi</p>
+                            </div>
+                            <a href="#contact" class="btn">Inquire Now</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-card-inner">
+                        <div class="product-card-front">
+                            <div class="product-image-container">
+                                <img src="assets/laptop_charger1.jpg" alt="laptop_charger1" class="product-image">
+                            </div>
+                            <div class="product-content">
+                                <span class="product-category">Accessories</span>
+                                <h3 class="product-title">Laptop Chargers</h3>
+                                <div class="product-rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                </div>
+                                <p class="product-price">KES 1,500 to 5,500</p>
+                            </div>
+                        </div>
+                        <div class="product-card-back">
+                            <h3 class="product-title">Charger Details</h3>
+                            <div class="product-description">
+                                <p>Compatible with all major laptop brands</p>
+                                <p>Fast-charging technology</p>
+                                <p>1-year replacement warranty</p>
+                            </div>
+                            <a href="#contact" class="btn">Inquire Now</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-card-inner">
+                        <div class="product-card-front">
+                            <span class="product-badge">-15%</span>
+                            <div class="product-image-container">
+                                <img src="assets/laptop_batteries.jpg" alt="Laptop_Batteries" class="product-image">
+                            </div>
+                            <div class="product-content">
+                                <span class="product-category">Accessories</span>
+                                <h3 class="product-title">Laptop Batteries</h3>
+                                <div class="product-rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                                <p class="product-price">KES 3,500 to KSh 5,500</p>
+                            </div>
+                        </div>
+                        <div class="product-card-back">
+                            <h3 class="product-title">Battery Details</h3>
+                            <div class="product-description">
+                                <p>High-capacity lithium-ion batteries</p>
+                                <p>Extended battery life technology</p>
+                                <p>Compatible with most laptop models</p>
+                            </div>
+                            <a href="#contact" class="btn">Inquire Now</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="product-card">
+                    <div class="product-card-inner">
+                        <div class="product-card-front">
+                            <div class="product-image-container">
+                                <img src="assets/printing_paper.jpg" alt="Printing_Paper" class="product-image">
+                            </div>
+                            <div class="product-content">
+                                <span class="product-category">Office Supplies</span>
+                                <h3 class="product-title">A4 & A3 Printing Papers</h3>
+                                <div class="product-rating">
+                                </div>
+                                <p class="product-price">KES 850 per ream</p>
+                            </div>
+                        </div>
+                        <div class="product-card-back">
+                            <h3 class="product-title">Paper Details</h3>
+                            <div class="product-description">
+                                <p>Premium quality for sharp printing</p>
+                                <p>Available in multiple weights</p>
+                                <p>Bulk discounts available</p>
+                            </div>
+                            <a href="#contact" class="btn">Inquire Now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 40px;">
+                <a href="products.html" class="btn">
+                    <i class="fas fa-arrow-right"></i> View All Products
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section class="services" id="services">
+        <div class="container">
+            <h2 class="section-title">Our Services</h2>
+            <div class="services-grid">
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3 class="service-title">M-Pesa Services</h3>
+                    <p class="service-text">We offer comprehensive M-Pesa services including deposits, withdrawals, and transfers.</p>
+                </div>
+                
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-tools"></i>
+                    </div>
+                    <h3 class="service-title">Device Repair</h3>
+                    <p class="service-text">Professional repair services for laptops, printers, and other electronics with warranty.</p>
+                </div>
+                
+                <div class="service-card">
+                    <div class="service-icon">
+                        <i class="fas fa-briefcase"></i>
+                    </div>
+                    <h3 class="service-title">Office Solutions</h3>
+                    <p class="service-text">Complete office supplies including toners, papers, and accessories with after-service support.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about" id="about">
+        <div class="container">
+            <div class="about-container">
+                <div class="about-content">
+                    <h2 class="section-title">About Verben Investments</h2>
+                    <p>Founded in 2015, Verben Investments has grown to become a trusted name in Toners and Cartridge supply, Computer sales & accessories, printer sales, and office accessories. We pride ourselves on offering quality products at competitive prices with exceptional customer service.</p>
+                    <p>Our team of knowledgeable professionals is dedicated to helping you find the perfect solutions for your personal or business needs.</p>
+                    <div class="about-stats">
+                        <div class="stat-item">
+                            <div class="stat-number" id="yearsCounter">0</div>
+                            <p>Years in Business</p>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number" id="customersCounter">0</div>
+                            <p>Happy Customers</p>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number" id="productsCounter">0</div>
+                            <p>Products Available</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-image">
+                    <img src="assets/office_stationaries.jpg" alt="Office Stationaries">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact" id="contact">
+        <div class="container">
+            <h2 class="section-title">Get In Touch</h2>
+            <div class="contact-container">
+                <div class="contact-info">
+                    <h3 class="footer-title">Our Information</h3>
+                    <div class="contact-item">
+                        <i class="fas fa-map-marker-alt contact-icon"></i>
+                        <div class="contact-text">
+                            <h3>Location</h3>
+                            <p>Mombasa Road, Vision Plaza Building, Ground Floor Room 9</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <i class="fas fa-envelope contact-icon"></i>
+                        <div class="contact-text">
+                            <h3>Email</h3>
+                            <p>verbenmail1@gmail.com</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <i class="fas fa-phone-alt contact-icon"></i>
+                        <div class="contact-text">
+                            <h3>Phone</h3>
+                            <p>0722613844 / 0780613844</p>
+                        </div>
+                    </div>
+                    
+                    <div class="contact-item">
+                        <i class="fas fa-clock contact-icon"></i>
+                        <div class="contact-text">
+                            <h3>Working Hours</h3>
+                            <p>Monday - Friday: 8:00 AM - 5:00 PM</p>
+                            <p>Saturday: 9:00 AM - 2:00 PM</p>
+                            <p>Sunday: Closed</p>
+                        </div>
+                    </div>
+                    
+                    <div class="map-container">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d532.7400467335955!2d36.852415321951526!3d-1.3269601334116439!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x182f11ec971ed07b%3A0x794da7f7b0b4e7e6!2sVision%20Plaza%2C%20Mombasa%20Road%2C%20Nairobi!5e1!3m2!1sen!2ske!4v1749653177553!5m2!1sen!2ske" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                    </div>
+                </div>
+                
+                <div class="contact-form">
+                    <h3 class="footer-title">Send Us a Message</h3>
+                    <form id="contactForm">
+                        <div class="form-group">
+                            <label for="name" class="form-label">Your Name</label>
+                            <input type="text" id="name" class="form-control" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email" class="form-label">Your Email</label>
+                            <input type="email" id="email" class="form-control" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="phone" class="form-label">Phone Number</label>
+                            <input type="tel" id="phone" class="form-control" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="subject" class="form-label">Subject</label>
+                            <input type="text" id="subject" class="form-control" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="message" class="form-label">Message</label>
+                            <textarea id="message" class="form-control" required></textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn">
+                            <i class="fas fa-paper-plane"></i> Send Message
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid" style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-start; gap: 32px; margin-bottom: 40px;">
+                <div class="footer-col" style="flex: 1 1 260px; min-width: 240px; max-width: 340px; display: flex; flex-direction: column; align-items: flex-start;">
+                    <h3 class="footer-logo">
+                        <i class="fas fa-laptop-code"></i>
+                        Verben Investments Ltd
+                    </h3>
+                    <p class="footer-about">Let's interact in our socials, for quick enquiries let's talk on whatsapp.</p>
+                    <div class="social-links">
+                        <a href="https://instagram.com/verbeninvestments" target="_blank" class="social-link" title="Follow us on Instagram">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="https://wa.me/254722613844?text=Hi%20Verben%20Investments%2C%20I%E2%80%99m%20interested%20in%20your%20products." target="_blank" class="social-link" title="Chat on WhatsApp">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                        <a href="mailto:verbenmail1@gmail.com" class="social-link" title="Email Us">
+                            <i class="fas fa-envelope"></i>
+                        </a>
+                        <a href="tel:0722613844" class="social-link" title="Call Us">
+                            <i class="fas fa-phone-alt"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="footer-col" style="flex: 1 1 180px; min-width: 180px; max-width: 240px; display: flex; flex-direction: column; align-items: flex-start;">
+                    <h3 class="footer-title">Quick Links</h3>
+                    <ul class="footer-links">
+                        <li class="footer-link"><a href="#home"><i class="fas fa-chevron-right"></i> Home</a></li>
+                        <li class="footer-link"><a href="#products"><i class="fas fa-chevron-right"></i> Products</a></li>
+                        <li class="footer-link"><a href="#services"><i class="fas fa-chevron-right"></i> Services</a></li>
+                        <li class="footer-link"><a href="#about"><i class="fas fa-chevron-right"></i> About Us</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col" style="flex: 1 1 180px; min-width: 180px; max-width: 240px; display: flex; flex-direction: column; align-items: flex-start;">
+                    <h3 class="footer-title">Products</h3>
+                    <ul class="footer-links">
+                        <li class="footer-link"><a href="#"><i class="fas fa-chevron-right"></i> Laptops</a></li>
+                        <li class="footer-link"><a href="#"><i class="fas fa-chevron-right"></i> Chargers</a></li>
+                        <li class="footer-link"><a href="#"><i class="fas fa-chevron-right"></i> Batteries</a></li>
+                        <li class="footer-link"><a href="#"><i class="fas fa-chevron-right"></i> Toners & Cartridges</a></li>
+                        <li class="footer-link"><a href="#"><i class="fas fa-chevron-right"></i> Office Supplies</a></li>  
+                        <li class="footer-link"><a href="products.html"><i class="fas fa-chevron-right"></i> More Products</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-col" style="flex: 1 1 220px; min-width: 200px; max-width: 260px; display: flex; flex-direction: column; align-items: flex-start;">
+                    <h3 class="footer-title">Contact Info</h3>
+                    <div class="footer-contact-item">
+                        <i class="fas fa-map-marker-alt footer-contact-icon"></i>
+                        <p>Mombasa Road, Vision Plaza, Ground Floor Room 9</p>
+                    </div>
+                    <div class="footer-contact-item">
+                        <i class="fas fa-envelope footer-contact-icon"></i>
+                        <p>verbenmail1@gmail.com</p>
+                    </div>
+                    <div class="footer-contact-item">
+                        <i class="fas fa-phone-alt footer-contact-icon"></i>
+                        <p>0722613844 / 0780613844</p>
+                    </div>
+                    <div class="footer-contact-item">
+                        <i class="fab fa-whatsapp footer-contact-icon"></i>
+                        <p>0722613844</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 Verben Investments Ltd. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const nav = document.getElement
+        const tocToggle = document.getElementById('tocToggle');
+        const toc = document.getElementById('toc');
+        const tocItems = document.querySelectorAll('.toc-item');
+        
+        tocToggle.addEventListener('click', () => {
+            toc.classList.toggle('active');
+            tocToggle.innerHTML = toc.classList.contains('active') 
+                ? '<i class="fas fa-times"></i>' 
+                : '<i class="fas fa-bars"></i>';
+        });
+        
+        // Smooth scrolling for all links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                    
+                    // Update active TOC item
+                    if (targetId !== '#home') {
+                        const section = targetId.substring(1);
+                        tocItems.forEach(item => {
+                            item.classList.remove('active');
+                            if (item.getAttribute('data-section') === section) {
+                                item.classList.add('active');
+                            }
+                        });
+                    }
+                    
+                    // Close mobile menu if open
+                    if (nav.classList.contains('active')) {
+                        nav.classList.remove('active');
+                        mobileMenuBtn.innerHTML = '<i class="fas fa-bars"></i>';
+                    }
+                }
+            });
+        });
+        
+        // Update active TOC item on scroll
+        window.addEventListener('scroll', () => {
+            const scrollPosition = window.scrollY;
+            
+            // Header scroll effect
+            if (scrollPosition > 50) {
+                document.querySelector('.header').classList.add('scrolled');
+            } else {
+                document.querySelector('.header').classList.remove('scrolled');
+            }
+            
+            // Back to top button
+            const backToTop = document.getElementById('backToTop');
+            if (scrollPosition > 500) {
+                backToTop.classList.add('visible');
+            } else {
+                backToTop.classList.remove('visible');
+            }
+            
+            // Update active TOC item
+            document.querySelectorAll('section').forEach(section => {
+                const sectionTop = section.offsetTop - 100;
+                const sectionHeight = section.offsetHeight;
+                const sectionId = section.getAttribute('id');
+                
+                if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+                    tocItems.forEach(item => {
+                        item.classList.remove('active');
+                        if (item.getAttribute('data-section') === sectionId) {
+                            item.classList.add('active');
+                        }
+                    });
+                }
+            });
+        });
+        
+        // Animation on scroll
+        const animateOnScroll = () => {
+            const elements = document.querySelectorAll('.feature-card, .product-card, .service-card, .stat-item');
+            
+            elements.forEach((element, index) => {
+                const elementPosition = element.getBoundingClientRect().top;
+                const windowHeight = window.innerHeight;
+                
+                if (elementPosition < windowHeight - 100) {
+                    setTimeout(() => {
+                        element.style.opacity = '1';
+                        element.style.transform = 'translateY(0)';
+                    }, index * 100);
+                }
+            });
+        };
+        
+        // Set initial styles for animated elements
+        document.querySelectorAll('.feature-card, .product-card, .service-card, .stat-item').forEach(element => {
+            element.style.opacity = '0';
+            element.style.transform = 'translateY(20px)';
+            element.style.transition = 'all 0.6s ease-out';
+        });
+        
+        window.addEventListener('scroll', animateOnScroll);
+        window.addEventListener('load', animateOnScroll);
+        
+        // Back to top functionality
+        document.getElementById('backToTop').addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+        
+        // Counter animation for stats
+        function animateCounter(element, start, end, duration) {
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                const value = Math.floor(progress * (end - start) + start);
+                element.textContent = value + "+";
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
+        
+        // Initialize counters when they come into view
+        const counterOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.5
+        };
+        
+        const counterObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animateCounter(document.getElementById('yearsCounter'), 0, 8, 1500);
+                    animateCounter(document.getElementById('customersCounter'), 0, 5000, 2000);
+                    animateCounter(document.getElementById('productsCounter'), 0, 100, 1000);
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, counterOptions);
+        
+        const aboutStats = document.querySelector('.about-stats');
+        if (aboutStats) {
+            counterObserver.observe(aboutStats);
+        }
+        
+        // Form submission
+        const contactForm = document.getElementById('contactForm');
+        if (contactForm) {
+            contactForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                alert('Thank you for your message! We will contact you soon.');
+                contactForm.reset();
+            });
+        }
+        
+            const heroTitle = document.querySelector('.hero-title');
+            if (heroTitle) heroTitle.style.animation = 'fadeInUp 1s ease-out forwards';
+            const heroSubtitle = document.querySelector('.hero-subtitle');
+            if (heroSubtitle) heroSubtitle.style.animation = 'fadeInUp 1s ease-out 0.2s forwards';
+            const heroButtons = document.querySelector('.hero-buttons');
+            if (heroButtons) heroButtons.style.animation = 'fadeInUp 1s ease-out 0.4s forwards';
+        document.querySelector('.hero-title').style.animation = 'fadeInUp 1s ease-out forwards';
+        document.querySelector('.hero-subtitle').style.animation = 'fadeInUp 1s ease-out 0.2s forwards';
+        document.querySelector('.hero-buttons').style.animation = 'fadeInUp 1s ease-out 0.4s forwards';
+    </script>
+</body>
+</html>
