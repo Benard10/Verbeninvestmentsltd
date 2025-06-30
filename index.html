@@ -1937,53 +1937,133 @@
         document.querySelector('.hero-buttons').style.animation = 'fadeInUp 1s ease-out 0.4s forwards';
     </script>
 
-        <!-- Weather Widget (Taller, Full Info) -->
-            <div id="weatherWidget" style="
+        <!-- Widget (Weather, Exchange, News) -->
+        <div id="combinedWidget" style="
             position: fixed;
-            bottom: 12px;
+            top: 80px;
             left: 8px;
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(0,0,0,0.15);
             backdrop-filter: blur(10px);
             color: white;
-            padding: 10px 14px;
-            border-radius: 10px;
+            padding: 12px 16px;
+            border-radius: 12px;
             font-size: 1rem;
             z-index: 999;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            min-width: 180px;
-            display: flex;
-            align-items: flex-start;
-            gap: 10px;
-            flex-direction: row;
             font-family: 'Poppins', sans-serif;
-            ">
-            <div id="weatherIcon" style="font-size: 1.5rem;">⛅</div>
-            <div>
-                <div style="font-size: 1.3rem; font-weight: 600;" id="weatherTemp">--°</div>
-                <div id="weatherDetails" style="font-size: 0.7rem; line-height: 1.4; margin-top: 2px;">
-                Loading...
+            min-width: 220px;
+            max-width: 320px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        ">
+            <div id="widgetSlides" style="width:100%;">
+                <!-- Weather Slide -->
+                <div class="widget-slide" id="weatherSlide">
+                    <div style="display:flex;align-items:center;gap:10px;">
+                        <div id="weatherIcon" style="font-size: 1.5rem;">⛅</div>
+                        <div>
+                            <div style="font-size: 1.3rem; font-weight: 600;" id="weatherTemp">--°</div>
+                            <div id="weatherDetails" style="font-size: 0.7rem; line-height: 1.4; margin-top: 2px;">Loading...</div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Exchange Slide -->
+                <div class="widget-slide" id="exchangeSlide" style="display:none;">
+                    <strong>Top 5 Exchange Rates</strong>
+                    <div id="currencyRates" style="margin-top: 6px;">Loading...</div>
+                </div>
+                <!-- News Slide -->
+                <div class="widget-slide" id="newsSlide" style="display:none;">
+                    <strong style="font-size:0.95rem;">💼 Kenya Business News</strong>
+                    <ul id="businessNewsList" style="margin-top:8px; padding-left:16px; font-size:0.8rem;"></ul>
                 </div>
             </div>
+            <div style="width:100%;display:flex;justify-content:space-between;align-items:center;margin-top:8px;">
+                <button id="prevWidgetBtn" style="background:none;border:none;color:white;font-size:1.2rem;cursor:pointer;">&#8592;</button>
+                <div id="widgetIndicator" style="font-size:0.8rem;">Weather</div>
+                <button id="nextWidgetBtn" style="background:none;border:none;color:white;font-size:1.2rem;cursor:pointer;">&#8594;</button>
             </div>
+        </div>
 
     <script>
-    const weatherWidget = document.getElementById('weatherWidget');
+    // --- Widget Slide Logic ---
+    const slides = [
+        {id: 'weatherSlide', label: 'Weather'},
+        {id: 'exchangeSlide', label: 'Exchange'},
+        {id: 'newsSlide', label: 'News'}
+    ];
+    let currentSlide = 0;
+    let widgetInterval = null;
 
-    function checkWeatherVisibility() {
-        const home = document.getElementById("home");
+    // Show/hide widget based on 3/4 scroll of home section
+    function checkCombinedWidgetVisibility() {
+        const widget = document.getElementById('combinedWidget');
+        const home = document.getElementById('home');
+        if (!widget || !home) return;
         const rect = home.getBoundingClientRect();
-        const isHomeVisible = rect.top <= window.innerHeight && rect.bottom >= 0;
         const isDesktop = window.innerWidth >= 768;
-        weatherWidget.style.display = (isHomeVisible && isDesktop) ? 'flex' : 'none';
+        // 1/2 point from the top of the home section
+        const halfway = rect.top + rect.height * 0.5;
+        // Show if halfway point is still visible in viewport and on desktop
+        if (halfway > 0 && rect.bottom > 0 && isDesktop) {
+            widget.style.display = '';
+        } else {
+            widget.style.display = 'none';
+        }
+    }
+    window.addEventListener('scroll', checkCombinedWidgetVisibility);
+    window.addEventListener('resize', checkCombinedWidgetVisibility);
+    document.addEventListener('DOMContentLoaded', checkCombinedWidgetVisibility);
+
+    function showSlide(idx) {
+        slides.forEach((slide, i) => {
+            document.getElementById(slide.id).style.display = (i === idx) ? '' : 'none';
+        });
+        document.getElementById('widgetIndicator').textContent = slides[idx].label;
+        currentSlide = idx;
     }
 
-    window.addEventListener("scroll", checkWeatherVisibility);
-    window.addEventListener("resize", checkWeatherVisibility);
-    document.addEventListener("DOMContentLoaded", () => {
-        checkWeatherVisibility();
+    function nextSlide() {
+        showSlide((currentSlide + 1) % slides.length);
+    }
+    function prevSlide() {
+        showSlide((currentSlide - 1 + slides.length) % slides.length);
+    }
+
+    document.getElementById('nextWidgetBtn').onclick = () => {
+        nextSlide();
+        resetWidgetInterval();
+    };
+    document.getElementById('prevWidgetBtn').onclick = () => {
+        prevSlide();
+        resetWidgetInterval();
+    };
+
+    function resetWidgetInterval() {
+        if (widgetInterval) clearInterval(widgetInterval);
+        widgetInterval = setInterval(nextSlide, 60000);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        showSlide(0);
+        resetWidgetInterval();
     });
 
-    // Existing weather fetch logic (unchanged)
+    // Optional: Swipe support for mobile
+    let startX = null;
+    document.getElementById('combinedWidget').addEventListener('touchstart', function(e) {
+        startX = e.touches[0].clientX;
+    });
+    document.getElementById('combinedWidget').addEventListener('touchend', function(e) {
+        if (startX === null) return;
+        let endX = e.changedTouches[0].clientX;
+        if (endX - startX > 40) { prevSlide(); resetWidgetInterval(); }
+        else if (startX - endX > 40) { nextSlide(); resetWidgetInterval(); }
+        startX = null;
+    });
+
+    // --- Weather Logic ---
     const weatherIcons = {
         0: "☀️", 1: "🌤️", 2: "⛅", 3: "☁️",
         45: "🌫️", 48: "🌫️", 51: "🌦️", 53: "🌧️", 55: "🌧️",
@@ -1992,10 +2072,8 @@
         77: "❄️", 80: "🌧️", 81: "🌧️", 82: "🌧️", 85: "🌨️",
         86: "🌨️", 95: "⛈️", 96: "⛈️", 99: "🌩️"
     };
-
     function fetchWeather(lat, lon) {
         const apiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,rain,weather_code,wind_speed_10m`;
-
         fetch(apiUrl)
         .then(res => res.json())
         .then(data => {
@@ -2005,20 +2083,14 @@
             const humidity = `${current.relative_humidity_2m}%`;
             const rain = `${current.rain} mm`;
             const wind = `${current.wind_speed_10m} km/h`;
-
             document.getElementById('weatherIcon').textContent = icon;
             document.getElementById('weatherTemp').textContent = temp;
-            document.getElementById('weatherDetails').innerHTML = `
-            Rain: ${rain}<br>
-            Humidity: ${humidity}<br>
-            Wind: ${wind}
-            `;
+            document.getElementById('weatherDetails').innerHTML = `Rain: ${rain}<br>Humidity: ${humidity}<br>Wind: ${wind}`;
         })
         .catch(() => {
             document.getElementById('weatherDetails').innerText = '⚠️ Unavailable';
         });
     }
-
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
         (pos) => fetchWeather(pos.coords.latitude, pos.coords.longitude),
@@ -2027,128 +2099,53 @@
     } else {
         fetchWeather(-1.2921, 36.8219);
     }
-    </script>
 
-        <!-- Currency Exchange Widget -->
-        <div id="currencyWidget" style="
-        position: fixed;
-        top: 80px;
-        left: 8px;
-        background: rgba(0,0,0,0.15);
-        backdrop-filter: blur(10px);
-        color: white;
-        padding: 10px 14px;
-        border-radius: 10px;
-        font-size: 0.95rem;
-        z-index: 999;
-        font-family: 'Poppins', sans-serif;
-        max-width: 210px;
-        display: none;
-        ">
-        <strong>Top 5 Exchange Rates</strong>
-        <div id="currencyRates" style="margin-top: 6px;">Loading...</div>
-        </div> 
-
-    <script>
-        const currencyWidget = document.getElementById("currencyWidget");
-        const currencyList = ['USD', 'EUR', 'GBP', 'JPY', 'INR'];
-
-        async function updateRates() {
-            try {
+    // --- Exchange Logic ---
+    const currencyList = ['USD', 'EUR', 'GBP', 'JPY', 'INR'];
+    async function updateRates() {
+        try {
             const url = "https://api.exchangerate.fun/latest?base=KES&symbols=USD,EUR,GBP,JPY,INR";
             const response = await fetch(url);
             const data = await response.json();
             const ratesDiv = document.getElementById("currencyRates");
-
             const list = currencyList.map(currency => {
                 const rate = (1 / data.rates[currency]).toFixed(2);
                 return `<div>1 ${currency} = ${rate} KES</div>`;
             });
-
             ratesDiv.innerHTML = list.join('');
-            } catch (err) {
+        } catch (err) {
             document.getElementById("currencyRates").innerHTML = "⚠️ Error fetching rates";
             console.error(err);
-            }
         }
+    }
+    document.addEventListener("DOMContentLoaded", () => {
+        updateRates();
+        setInterval(updateRates, 300000); // Refresh every 5 mins
+    });
 
-        // Show/hide widgets if the "home" section is visible and TOC is not active
-        function checkWidgetVisibility() {
-            const toc = document.getElementById('toc');
-            if (forceHideWidgets) {
-                setWidgetsVisibility(false);
-                // If user scrolls back to home section, reset the flag and show widgets
-                if (isHomeSectionVisible()) {
-                    forceHideWidgets = false;
-                    setWidgetsVisibility(true);
-                }
-                return;
-            }
-            // Hide widgets if scrolled past halfway of home section
-            if (isBeforeHomeSectionHalfway() && isHomeSectionVisible() && !(toc && toc.classList.contains('active'))) {
-                setWidgetsVisibility(true);
-            } else {
-                setWidgetsVisibility(false);
-            }
-        }
-
-        document.addEventListener("DOMContentLoaded", () => {
-            checkWidgetVisibility();
-            updateRates();
-            setInterval(updateRates, 300000); // Refresh every 5 mins
-        });
-
-        window.addEventListener("scroll", checkWidgetVisibility);
-        window.addEventListener("resize", checkWidgetVisibility);
-    </script>
-
-       <!-- Kenya Business News Widget -->
-        <div id="kenyaBusinessWidget" style="
-        position: fixed;
-        bottom: 145px;
-        left: 8px;
-        background: rgba(0,0,0,0.15);
-        backdrop-filter: blur(10px);
-        color: white;
-        padding: 12px 16px;
-        border-radius: 12px;
-        font-size: 0.75rem;
-        z-index: 999;
-        font-family: 'Poppins', sans-serif;
-        max-width: 300px;
-        display: none;
-        ">
-        <strong style="font-size:0.85rem;">💼 Kenya Business News</strong>
-        <ul id="businessNewsList" style="margin-top:8px; padding-left:16px;"></ul>
-        </div>
-
-    <script>
-        async function loadKenyaBusinessNews() {
-            try {
+    // --- News Logic ---
+    async function loadKenyaBusinessNews() {
+        try {
             const res = await fetch("https://api.allorigins.win/raw?url=" + encodeURIComponent("https://www.standardmedia.co.ke/rss/business.php"));
             const text = await res.text();
             const doc = new DOMParser().parseFromString(text, "text/xml");
             const items = Array.from(doc.querySelectorAll("item"));
-            
             items.sort((a, b) => new Date(b.querySelector("pubDate")?.textContent) - new Date(a.querySelector("pubDate")?.textContent));
             const top5 = items.slice(0, 5).map(item => {
                 const title = item.querySelector("title")?.textContent;
                 const link = item.querySelector("link")?.textContent;
                 return `<li style="margin-bottom:6px;"><a href="${link}" target="_blank" style="color:white; text-decoration:none;">${title}</a></li>`;
             }).join("");
-
             document.getElementById("businessNewsList").innerHTML = top5 || "<li>No Business News Found.</li>";
-            } catch (e) {
+        } catch (e) {
             document.getElementById("businessNewsList").innerHTML = "<li>⚠️ Could not load news.</li>";
             console.error(e);
-            }
         }
-
-        // Remove toggleBusinessWidget, handled by setWidgetsVisibility now
-        document.addEventListener("DOMContentLoaded", () => {
-            loadKenyaBusinessNews();
-            setInterval(loadKenyaBusinessNews, 600000);
-        });
+    }
+    document.addEventListener("DOMContentLoaded", () => {
+        loadKenyaBusinessNews();
+        setInterval(loadKenyaBusinessNews, 600000);
+    });
     </script>
 </body>
 </html>
