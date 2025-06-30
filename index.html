@@ -1724,16 +1724,46 @@
     <script>
         // Mobile menu toggle
         const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-        const nav = document.getElementById
+        const nav = document.getElementB
         const tocToggle = document.getElementById('tocToggle');
         const toc = document.getElementById('toc');
         const tocItems = document.querySelectorAll('.toc-item');
         
+        let forceHideWidgets = false;
+
+        function setWidgetsVisibility(visible) {
+            const weatherWidget = document.getElementById('weatherWidget');
+            const currencyWidget = document.getElementById('currencyWidget');
+            const kenyaBusinessWidget = document.getElementById('kenyaBusinessWidget');
+            if (weatherWidget) weatherWidget.style.display = visible ? 'flex' : 'none';
+            if (currencyWidget) currencyWidget.style.display = visible ? 'block' : 'none';
+            if (kenyaBusinessWidget) kenyaBusinessWidget.style.display = visible ? 'block' : 'none';
+        }
+
+        function isHomeSectionVisible() {
+            const home = document.getElementById("home");
+            const rect = home.getBoundingClientRect();
+            const isDesktop = window.innerWidth >= 768;
+            return (rect.top <= window.innerHeight && rect.bottom >= 0 && isDesktop);
+        }
+
+        // Returns true if the scroll is before halfway through the home section
+        function isBeforeHomeSectionHalfway() {
+            const home = document.getElementById("home");
+            if (!home) return false;
+            const rect = home.getBoundingClientRect();
+            const homeMid = rect.top + rect.height / 2;
+            // If the midpoint is above the top of the viewport, we've scrolled past halfway
+            return homeMid > 0;
+        }
+
         tocToggle.addEventListener('click', () => {
             toc.classList.toggle('active');
             tocToggle.innerHTML = toc.classList.contains('active') 
                 ? '<i class="fas fa-times"></i>' 
                 : '<i class="fas fa-bars"></i>';
+            // Hide widgets when TOC is active, show when not (if home is visible)
+            setWidgetsVisibility(!(toc.classList.contains('active')) && isHomeSectionVisible());
         });
         
         // Smooth scrolling for all links
@@ -1744,6 +1774,12 @@
                 const targetId = this.getAttribute('href');
                 if (targetId === '#') return;
                 
+                // Hide widgets and set flag if "Why Choose Verben" TOC item is clicked
+                if (this.classList.contains('toc-item') && this.getAttribute('data-section') === 'features') {
+                    forceHideWidgets = true;
+                    setWidgetsVisibility(false);
+                }
+
                 const targetElement = document.querySelector(targetId);
                 if (targetElement) {
                     window.scrollTo({
@@ -1901,7 +1937,7 @@
         document.querySelector('.hero-buttons').style.animation = 'fadeInUp 1s ease-out 0.4s forwards';
     </script>
 
-     <!-- Weather Widget -->
+        <!-- Weather Widget (Taller, Full Info) -->
             <div id="weatherWidget" style="
             position: fixed;
             bottom: 12px;
@@ -1947,7 +1983,7 @@
         checkWeatherVisibility();
     });
 
-    // Weather fetch 
+    // Existing weather fetch logic (unchanged)
     const weatherIcons = {
         0: "☀️", 1: "🌤️", 2: "⛅", 3: "☁️",
         45: "🌫️", 48: "🌫️", 51: "🌦️", 53: "🌧️", 55: "🌧️",
@@ -1997,7 +2033,7 @@
         <div id="currencyWidget" style="
         position: fixed;
         top: 80px;
-        left: 12px;
+        left: 8px;
         background: rgba(0,0,0,0.15);
         backdrop-filter: blur(10px);
         color: white;
@@ -2036,26 +2072,37 @@
             }
         }
 
-        // Show the widget in the "home" section only
+        // Show/hide widgets if the "home" section is visible and TOC is not active
         function checkWidgetVisibility() {
-        const home = document.getElementById("home");
-        const rect = home.getBoundingClientRect();
-        const isVisible = rect.top <= window.innerHeight && rect.bottom >= 0;
-        const isDesktop = window.innerWidth >= 768;
-        currencyWidget.style.display = (isVisible && isDesktop) ? "block" : "none";
+            const toc = document.getElementById('toc');
+            if (forceHideWidgets) {
+                setWidgetsVisibility(false);
+                // If user scrolls back to home section, reset the flag and show widgets
+                if (isHomeSectionVisible()) {
+                    forceHideWidgets = false;
+                    setWidgetsVisibility(true);
+                }
+                return;
+            }
+            // Hide widgets if scrolled past halfway of home section
+            if (isBeforeHomeSectionHalfway() && isHomeSectionVisible() && !(toc && toc.classList.contains('active'))) {
+                setWidgetsVisibility(true);
+            } else {
+                setWidgetsVisibility(false);
+            }
         }
 
         document.addEventListener("DOMContentLoaded", () => {
-        checkWidgetVisibility();
-        updateRates();
-        setInterval(updateRates, 300000); // Refresh every 5 mins
+            checkWidgetVisibility();
+            updateRates();
+            setInterval(updateRates, 300000); // Refresh every 5 mins
         });
 
         window.addEventListener("scroll", checkWidgetVisibility);
         window.addEventListener("resize", checkWidgetVisibility);
     </script>
 
-    <!-- Kenya Business News Widget -->
+       <!-- Kenya Business News Widget -->
         <div id="kenyaBusinessWidget" style="
         position: fixed;
         bottom: 145px;
@@ -2097,20 +2144,11 @@
             }
         }
 
-        function toggleBusinessWidget() {
-            const w = document.getElementById("kenyaBusinessWidget");
-            const home = document.getElementById("home");
-            const r = home.getBoundingClientRect();
-            w.style.display = (r.top <= window.innerHeight && r.bottom >= 0 && window.innerWidth >= 768) ? "block" : "none";
-        }
-
+        // Remove toggleBusinessWidget, handled by setWidgetsVisibility now
         document.addEventListener("DOMContentLoaded", () => {
-            toggleBusinessWidget();
             loadKenyaBusinessNews();
             setInterval(loadKenyaBusinessNews, 600000);
         });
-        window.addEventListener("scroll", toggleBusinessWidget);
-        window.addEventListener("resize", toggleBusinessWidget);
     </script>
 </body>
 </html>
