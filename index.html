@@ -1900,5 +1900,84 @@
         document.querySelector('.hero-subtitle').style.animation = 'fadeInUp 1s ease-out 0.2s forwards';
         document.querySelector('.hero-buttons').style.animation = 'fadeInUp 1s ease-out 0.4s forwards';
     </script>
+
+    <!-- Weather Widget -->
+        <div id="weatherWidget" style="
+        position: fixed;
+        bottom: 12px;
+        left: 8px;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        color: white;
+        padding: 10px 14px;
+        border-radius: 10px;
+        font-size: 0.75rem;
+        z-index: 999;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        min-width: 180px;
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        flex-direction: row;
+        font-family: 'Poppins', sans-serif;
+        ">
+        <div id="weatherIcon" style="font-size: 1.5rem;">⛅</div>
+        <div>
+            <div style="font-size: 1.3rem; font-weight: 600;" id="weatherTemp">--°</div>
+            <div id="weatherDetails" style="font-size: 0.7rem; line-height: 1.4; margin-top: 2px;">
+            Loading...
+            </div>
+        </div>
+        </div>
+
+    <script>
+        const weatherIcons = {
+            0: "☀️", 1: "🌤️", 2: "⛅", 3: "☁️",
+            45: "🌫️", 48: "🌫️",
+            51: "🌦️", 53: "🌧️", 55: "🌧️",
+            56: "❄️", 57: "❄️",
+            61: "🌦️", 63: "🌧️", 65: "🌧️",
+            66: "❄️", 67: "❄️",
+            71: "🌨️", 73: "🌨️", 75: "❄️", 77: "❄️",
+            80: "🌧️", 81: "🌧️", 82: "🌧️",
+            85: "🌨️", 86: "🌨️",
+            95: "⛈️", 96: "⛈️", 99: "🌩️"
+        };
+
+        function fetchWeather(lat, lon) {
+            const apiUrl = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=temperature_2m,relative_humidity_2m,rain,weather_code,wind_speed_10m`;
+
+            fetch(apiUrl)
+            .then(res => res.json())
+            .then(data => {
+                const current = data.current;
+                const icon = weatherIcons[current.weather_code] || "🌍";
+                const temp = `${current.temperature_2m}°C`;
+                const humidity = `${current.relative_humidity_2m}%`;
+                const rain = `${current.rain} mm`;
+                const wind = `${current.wind_speed_10m} km/h`;
+
+                document.getElementById('weatherIcon').textContent = icon;
+                document.getElementById('weatherTemp').textContent = temp;
+                document.getElementById('weatherDetails').innerHTML = `
+                Rain: ${rain}<br>
+                Humidity: ${humidity}<br>
+                Wind: ${wind}
+                `;
+            })
+            .catch(() => {
+                document.getElementById('weatherDetails').innerText = '⚠️ Weather unavailable';
+            });
+        }
+
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+            (pos) => fetchWeather(pos.coords.latitude, pos.coords.longitude),
+            () => fetchWeather(-1.2921, 36.8219)
+            );
+        } else {
+            fetchWeather(-1.2921, 36.8219);
+        }
+    </script> 
 </body>
 </html>
