@@ -1248,6 +1248,12 @@
                 display: none !important;
             }
         }
+     /* Hide combined widget on mobile */
+    @media (max-width: 767px) {
+        #combinedWidget {
+            display: none !important;
+        }
+    }
     </style>
 </head>
 <body>
@@ -1627,20 +1633,23 @@
                 
                 <div class="contact-form">
                   <h3 class="footer-title">Send Us a Message</h3>
-                  <form id="contactForm">
+                  <form id="contactForm" action="https://formspree.io/f/mzzgoyjp" method="POST">
                     <div class="form-group">
-                      <input type="text" id="name" class="form-control" placeholder="Your Name" required>
+                      <label for="name" class="form-label">Your Name</label>
+                      <input type="text" name="name" id="name" class="form-control" placeholder="Enter your name" required>
                     </div>
                     <div class="form-group">
-                      <input type="email" id="email" class="form-control" placeholder="Your Email" required>
+                      <label for="email" class="form-label">Your Email</label>
+                      <input type="email" name="email" id="email" class="form-control" placeholder="Enter your email" required>
                     </div>
                     <div class="form-group">
-                      <textarea id="message" class="form-control" placeholder="Message" required></textarea>
+                      <label for="message" class="form-label">Message</label>
+                      <textarea name="message" id="message" class="form-control" placeholder="Type your message here" required></textarea>
                     </div>
                     <button type="submit" class="btn">
                       <i class="fas fa-paper-plane"></i> Send Message
                     </button>
-                   </form>
+                  </form>
                 </div>
             </div>
         </div>
@@ -1916,16 +1925,7 @@
             counterObserver.observe(aboutStats);
         }
         
-        // Form submission
-        const contactForm = document.getElementById('contactForm');
-        if (contactForm) {
-            contactForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                alert('Thank you for your message! We will contact you soon.');
-                contactForm.reset();
-            });
-        }
-        
+                
             const heroTitle = document.querySelector('.hero-title');
             if (heroTitle) heroTitle.style.animation = 'fadeInUp 1s ease-out forwards';
             const heroSubtitle = document.querySelector('.hero-subtitle');
