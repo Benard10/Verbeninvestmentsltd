@@ -2302,7 +2302,7 @@
         <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
         <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
         <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
-        <a href="#" class="social-icon"><i class="fab fa-whatsapp"></i></a>
+        <a href="#" class="social-icon" onclick="openWhatsApp(event, '254722613844', 'Hi Verben Investments, I’m interested in your products.')"><i class="fab fa-whatsapp"></i></a>
       </div>
       
       <div class="copyright">
@@ -3233,5 +3233,30 @@
       renderCartItems();
     });
   </script>
+<script>
+// WhatsApp intent opener for Android/iOS/WebView
+function openWhatsApp(event, phone, message) {
+    event.preventDefault();
+    var encodedMsg = encodeURIComponent(message);
+    var waIntent = 'intent://send/?phone=' + phone + '&text=' + encodedMsg + '#Intent;scheme=whatsapp;package=com.whatsapp;end';
+    var waScheme = 'whatsapp://send?phone=' + phone + '&text=' + encodedMsg;
+    var waWeb = 'https://wa.me/' + phone + '?text=' + encodedMsg;
+    var isAndroid = /Android/i.test(navigator.userAgent);
+    var isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
+    if (isAndroid) {
+        window.location.href = waIntent;
+        setTimeout(function() {
+            window.location.href = waWeb;
+        }, 1200);
+    } else if (isIOS) {
+        window.location.href = waScheme;
+        setTimeout(function() {
+            window.location.href = waWeb;
+        }, 1200);
+    } else {
+        window.open(waWeb, '_blank');
+    }
+}
+</script>
 </body>
 </html>
