@@ -2750,7 +2750,8 @@
           <button class="btn-checkout" id="completeOrder">
             <i class="fa-solid fa-check"></i> Complete Your Order
           </button>
-          
+
+                    
           <div class="cart-buttons">
             <button class="cart-btn btn-back" id="backToDelivery">
               <i class="fas fa-arrow-left"></i> Back to Delivery Info
@@ -2767,6 +2768,12 @@
           <p class="confirmation-text">
             Your order has been successfully placed. We've received your order details and will contact you shortly to confirm delivery and payment details.
           </p>
+          <div style="margin: 18px 0 0 0; text-align: center;">
+            <a href="https://wa.me/254722613844?text=Hi%2C%20I%20just%20placed%20an%20order%20on%20your%20website.%20My%20order%20is%20complete." target="_blank" style="display:inline-block; background:#25D366; color:white; padding:12px 28px; border-radius:8px; font-weight:600; text-decoration:none; font-size:1.1rem; margin-top:8px;">
+              <i class="fab fa-whatsapp"></i> Optional WhatsApp Checkout
+            </a>
+            <div style="font-size:0.95rem; color:#333; margin-top:6px;"> WhatsApp checkout is optional but provides faster processing and delivery of your order.</div>
+          </div>
           
           <div class="order-details">
             <div class="order-detail">
@@ -3012,7 +3019,11 @@
         const orderNumber = new Date().getFullYear() + '-' + Math.floor(1000 + Math.random() * 9000);
 
         // Update order confirmation
-        document.getElementById('orderNumber').textContent = orderNumber;
+        if (window._verbenOrderNumber) {
+          document.getElementById('orderNumber').textContent = window._verbenOrderNumber;
+        } else {
+          document.getElementById('orderNumber').textContent = orderNumber;
+        }
         document.getElementById('orderTotal').textContent = `KES ${this.calculateTotal().toLocaleString()}`;
         // If you have an orderAddress element, update it; otherwise, remove this line or update the relevant summary fields
         if (document.getElementById('orderAddress')) {
@@ -3138,20 +3149,20 @@
         // Generate Order ID
         const orderId = 'VB-' + new Date().getFullYear() + '-' + Math.floor(1000 + Math.random() * 9000);
 
-        // Generate order number
-        const orderNumber = 'VB' + Date.now().toString().slice(-7);
-        // Generate WhatsApp/email message
-        let waMsg = `Order No: ${orderNumber}%0A`;
-        waMsg += `Hi Verben Investments, I’m interested in ordering the following products:%0A%0A`;
+        // Generate order number ONCE and reuse everywhere
+        if (!window._verbenOrderNumber) {
+          window._verbenOrderNumber = 'VB' + Math.floor(Math.random() * 9000000 + 1000000);
+        }
+        const orderNumber = window._verbenOrderNumber;
+        // Generate WhatsApp/email message in the same format as email
+        let waMsg = `Order No: ${orderNumber}\n\nHi Verben Investments, I’m interested in ordering the following products:\n\n`;
         cart.items.forEach(item => {
-          waMsg += `- ${item.name} x${item.quantity} (KES ${(item.price * item.quantity).toLocaleString()})%0A`;
+          waMsg += `- ${item.name} x${item.quantity} (KES ${(item.price * item.quantity).toLocaleString()})\n`;
         });
-        waMsg += `%0ASubtotal: KES ${cart.calculateTotal().toLocaleString()}%0A%0A`;
-        waMsg += `Name: ${name}%0A`;
-        waMsg += `Phone: ${phone}%0A`;
-        waMsg += `Email: ${email}%0A`;
-        waMsg += `Address: ${estate}, ${ward}, ${subCounty}, ${county}%0A`;
-        waMsg += `Instructions: ${instructions || 'None'}%0A`;
+        waMsg += `\nSubtotal: KES ${cart.calculateTotal().toLocaleString()}\n\n`;
+        waMsg += `Name: ${name}\n\nPhone: ${phone}\n\nEmail: ${email}\n\nAddress: ${estate}, ${ward}, ${subCounty}, ${county}\n\nInstructions: ${instructions || 'None'}`;
+        // Encode for WhatsApp URL
+        waMsg = encodeURIComponent(waMsg);
 
         // Send order to email via Formspree
         (function sendOrderToEmail() {
@@ -3159,29 +3170,52 @@
           formData.append('name', name);
           formData.append('email', email);
           formData.append('phone', phone);
-          formData.append('message', decodeURIComponent(waMsg.replace(/%0A/g, '\n')));
+          // Build order message in requested format (for both email and WhatsApp)
+          let orderMsg = `Order No: ${orderNumber}\n\nHi Verben Investments, I’m interested in ordering the following products:\n\n`;
+          cart.items.forEach(item => {
+          orderMsg += `- ${item.name} x${item.quantity} (KES ${(item.price * item.quantity).toLocaleString()})\n`;
+          });
+          orderMsg += `\nSubtotal: KES ${cart.calculateTotal().toLocaleString()}\n\n`;
+          orderMsg += `Name: ${name}\n\nPhone: ${phone}\n\nEmail: ${email}\n\nAddress: ${estate}, ${ward}, ${subCounty}, ${county}\n\nInstructions: ${instructions || 'None'}`;
+          formData.append('message', orderMsg);
           formData.append('_subject', `Order from ${name}`);
           formData.append('_replyto', email);
           fetch('https://formspree.io/f/mzzgoyjp', {
             method: 'POST',
             headers: { 'Accept': 'application/json' },
             body: formData
+          })
+          .then(response => {
+            if (response.ok) {
+              // Show confirmation and WhatsApp option
+              document.getElementById('checkoutSummary').innerHTML = `
+                <div style='text-align:center;padding:40px 20px;'>
+                  <div style='font-size:2.5rem;color:#2ecc71;margin-bottom:20px;'><i class='fas fa-check-circle'></i></div>
+                  <h2 style='color:#1432BA;'>Order Sent!</h2>
+                  <p style='font-size:1.1rem;margin:20px 0;'>Thank you, ${name}.<br><strong>Your Order Number: ${orderNumber}</strong><br>Your order has been sent to our team. We will contact you soon.<br><br>
+                  <strong>For faster service, you can send your order via WhatsApp:</strong></p>
+                  <a href='https://wa.me/254722613844?text=${waMsg}' target='_blank' style='display:inline-block;background:#25D366;color:white;padding:14px 28px;border-radius:30px;font-size:1.1rem;text-decoration:none;margin-top:18px;'><i class='fab fa-whatsapp'></i> Send via WhatsApp</a>
+                  <p style='margin-top:18px;font-size:0.95rem;color:rgb(219, 141, 208);background:rgba(219,141,208,0.08);padding:8px 12px;border-radius:6px;display:inline-block;'>WhatsApp checkout is optional but provides faster processing and delivery of your order.</p>
+                  <p style='margin-top:18px;font-size:0.95rem;color:#555;'>If you do not use WhatsApp, your order will still be processed via email.</p>
+                </div>
+              `;
+              cart.completeOrder();
+            } else {
+              response.json().then(data => {
+                let errorMsg = 'Sorry, there was a problem sending your order.';
+                if (data && data.errors && data.errors.length > 0) {
+                  errorMsg = data.errors.map(e => e.message).join('<br>');
+                }
+                document.getElementById('checkoutSummary').innerHTML = `<div style='color:red;text-align:center;padding:40px 20px;'><strong>${errorMsg}</strong></div>`;
+              }).catch(() => {
+                document.getElementById('checkoutSummary').innerHTML = `<div style='color:red;text-align:center;padding:40px 20px;'><strong>Sorry, there was a problem sending your order.</strong></div>`;
+              });
+            }
+          })
+          .catch(() => {
+            document.getElementById('checkoutSummary').innerHTML = `<div style='color:red;text-align:center;padding:40px 20px;'><strong>Network error. Please try again later.</strong></div>`;
           });
         })();
-        // Show confirmation and WhatsApp option
-        setTimeout(function() {
-          document.getElementById('checkoutSummary').innerHTML = `
-            <div style='text-align:center;padding:40px 20px;'>
-              <div style='font-size:2.5rem;color:#2ecc71;margin-bottom:20px;'><i class='fas fa-check-circle'></i></div>
-              <h2 style='color:#1432BA;'>Order Sent!</h2>
-              <p style='font-size:1.1rem;margin:20px 0;'>Thank you, ${name}. Your order has been sent to our team. We will contact you soon.<br><br>
-              <strong>For faster service, send your order via WhatsApp:</strong></p>
-              <a href='https://wa.me/254722613844?text=${waMsg}' target='_blank' style='display:inline-block;background:#25D366;color:white;padding:14px 28px;border-radius:30px;font-size:1.1rem;text-decoration:none;margin-top:18px;'><i class='fab fa-whatsapp'></i> Send via WhatsApp</a>
-            </div>
-          `;
-        }, 300);
-        // Finalize order
-        cart.completeOrder();
       });
 
       // Close after order
@@ -3282,6 +3316,66 @@ function openWhatsApp(event, phone, message) {
         window.open(waWeb, '_blank');
     }
 }
+</script>
+<!-- WhatsApp Checkout Button Logic (cleaned, single instance) -->
+<script>
+(function() {
+  function getCartItems() {
+    try {
+      return JSON.parse(localStorage.getItem('cartItems') || '[]');
+    } catch (e) { return []; }
+  }
+  function getDeliveryInfo() {
+    return {
+      name: document.getElementById('fullName')?.value || '',
+      email: document.getElementById('email')?.value || '',
+      phone: document.getElementById('phone')?.value || '',
+      county: document.getElementById('county')?.value || '',
+      subCounty: document.getElementById('subCounty')?.value || '',
+      ward: document.getElementById('ward')?.value || '',
+      estate: document.getElementById('estate')?.value || '',
+      instructions: document.getElementById('instructions')?.value || ''
+    };
+  }
+  function formatOrderForWhatsApp(items, info) {
+    let msg = '*Verben Investments Order*%0A';
+    msg += '%0A*Items:*%0A';
+    items.forEach((item, i) => {
+      msg += `${i+1}. ${item.name} x${item.quantity} - KES ${item.price * item.quantity}%0A`;
+    });
+    msg += `%0A*Delivery Info:*%0A`;
+    msg += `Name: ${info.name}%0A`;
+    msg += `Email: ${info.email}%0A`;
+    msg += `Phone: ${info.phone}%0A`;
+    msg += `County: ${info.county}%0A`;
+    msg += `Sub-county: ${info.subCounty}%0A`;
+    msg += `Ward: ${info.ward}%0A`;
+    msg += `Estate: ${info.estate}%0A`;
+    if(info.instructions) msg += `Instructions: ${info.instructions}%0A`;
+    return msg;
+  }
+  document.addEventListener('DOMContentLoaded', function() {
+    var btn = document.getElementById('whatsappCheckoutBtn');
+    if (btn) {
+      btn.addEventListener('click', function() {
+        var items = getCartItems();
+        var info = getDeliveryInfo();
+        if (!items.length) {
+          alert('Your cart is empty.');
+          return;
+        }
+        if (!info.name || !info.phone || !info.county) {
+          alert('Please fill in your delivery information before using WhatsApp checkout.');
+          return;
+        }
+        var message = formatOrderForWhatsApp(items, info);
+        var phone = '254722613844';
+        var url = `https://wa.me/${phone}?text=${message}`;
+        window.open(url, '_blank');
+      });
+    }
+  });
+})();
 </script>
 </body>
 </html>
