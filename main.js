@@ -2,7 +2,7 @@
 
 // Mobile menu toggle
 const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-const nav = document.getElementB
+const nav = document.getElementById('nav');
 const tocToggle = document.getElementById('tocToggle');
 const toc = document.getElementById('toc');
 const tocItems = document.querySelectorAll('.toc-item');
@@ -333,4 +333,36 @@ async function loadKenyaBusinessNews() {
 document.addEventListener("DOMContentLoaded", () => {
     loadKenyaBusinessNews();
     setInterval(loadKenyaBusinessNews, 600000);
+
+    // Contact Form AJAX Submission
+    const contactForm = document.getElementById('contactForm');
+    if (contactForm) {
+        contactForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const formMessage = document.getElementById('contactFormMessage');
+            formMessage.textContent = '';
+            const formData = new FormData(contactForm);
+            formMessage.innerHTML = '<span style="color:#0790E8;">Sending...</span>';
+            try {
+                const response = await fetch('https://formspree.io/f/mzzgoyjp', {
+                    method: 'POST',
+                    headers: { 'Accept': 'application/json' },
+                    body: formData
+                });
+                if (response.ok) {
+                    contactForm.reset();
+                    formMessage.innerHTML = '<span style="color:green;">Thank you! Your message has been sent.</span>';
+                } else {
+                    const data = await response.json();
+                    let errorMsg = 'Sorry, there was a problem sending your message.';
+                    if (data && data.errors && data.errors.length > 0) {
+                        errorMsg = data.errors.map(e => e.message).join('<br>');
+                    }
+                    formMessage.innerHTML = `<span style=\"color:red;\">${errorMsg}</span>`;
+                }
+            } catch (err) {
+                formMessage.innerHTML = '<span style="color:red;">Network error. Please try again later.</span>';
+            }
+        });
+    }
 });
