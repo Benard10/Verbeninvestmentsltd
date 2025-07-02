@@ -3153,8 +3153,23 @@
         waMsg += `Address: ${estate}, ${ward}, ${subCounty}, ${county}%0A`;
         waMsg += `Instructions: ${instructions || 'None'}%0A`;
 
+        // Send order to email via Formspree
+        (function sendOrderToEmail() {
+          const formData = new FormData();
+          formData.append('name', name);
+          formData.append('email', email);
+          formData.append('phone', phone);
+          formData.append('message', decodeURIComponent(waMsg.replace(/%0A/g, '\n')));
+          formData.append('_subject', `Order from ${name}`);
+          fetch('https://formspree.io/f/mzzgoyjp', {
+            method: 'POST',
+            headers: { 'Accept': 'application/json' },
+            body: formData
+          });
+        })();
         // Open WhatsApp with the message
-        window.open(`https://wa.me/254722613844?text=${waMsg}`, '_blank');
+        // Use location.href for best compatibility in APK/webview
+        window.location.href = `https://wa.me/254722613844?text=${waMsg}`;
 
         // Finalize order
         cart.completeOrder();
@@ -3260,4 +3275,4 @@ function openWhatsApp(event, phone, message) {
 }
 </script>
 </body>
-  </html>
+</html>
