@@ -2398,7 +2398,7 @@
           <div class="form-group">
             <label class="form-label">County</label>
             <select class="form-control" id="county" required>
-              <option value=">Select County</option>
+              <option value="">Select County</option>
               <option value="Nairobi">Nairobi</option>
               <option value="Mombasa">Mombasa</option>
               <option value="Kisumu">Kisumu</option>
@@ -3138,15 +3138,15 @@
         // Generate Order ID
         const orderId = 'VB-' + new Date().getFullYear() + '-' + Math.floor(1000 + Math.random() * 9000);
 
-        // Generate WhatsApp message
-        let waMsg = `Hi Verben Investments, I’m interested in ordering the following products:%0A%0A`;
-
+        // Generate order number
+        const orderNumber = 'VB' + Date.now().toString().slice(-7);
+        // Generate WhatsApp/email message
+        let waMsg = `Order No: ${orderNumber}%0A`;
+        waMsg += `Hi Verben Investments, I’m interested in ordering the following products:%0A%0A`;
         cart.items.forEach(item => {
           waMsg += `- ${item.name} x${item.quantity} (KES ${(item.price * item.quantity).toLocaleString()})%0A`;
         });
-
         waMsg += `%0ASubtotal: KES ${cart.calculateTotal().toLocaleString()}%0A%0A`;
-
         waMsg += `Name: ${name}%0A`;
         waMsg += `Phone: ${phone}%0A`;
         waMsg += `Email: ${email}%0A`;
@@ -3161,16 +3161,25 @@
           formData.append('phone', phone);
           formData.append('message', decodeURIComponent(waMsg.replace(/%0A/g, '\n')));
           formData.append('_subject', `Order from ${name}`);
+          formData.append('_replyto', email);
           fetch('https://formspree.io/f/mzzgoyjp', {
             method: 'POST',
             headers: { 'Accept': 'application/json' },
             body: formData
           });
         })();
-        // Open WhatsApp with the message
-        // Use location.href for best compatibility in APK/webview
-        window.location.href = `https://wa.me/254722613844?text=${waMsg}`;
-
+        // Show confirmation and WhatsApp option
+        setTimeout(function() {
+          document.getElementById('checkoutSummary').innerHTML = `
+            <div style='text-align:center;padding:40px 20px;'>
+              <div style='font-size:2.5rem;color:#2ecc71;margin-bottom:20px;'><i class='fas fa-check-circle'></i></div>
+              <h2 style='color:#1432BA;'>Order Sent!</h2>
+              <p style='font-size:1.1rem;margin:20px 0;'>Thank you, ${name}. Your order has been sent to our team. We will contact you soon.<br><br>
+              <strong>For faster service, send your order via WhatsApp:</strong></p>
+              <a href='https://wa.me/254722613844?text=${waMsg}' target='_blank' style='display:inline-block;background:#25D366;color:white;padding:14px 28px;border-radius:30px;font-size:1.1rem;text-decoration:none;margin-top:18px;'><i class='fab fa-whatsapp'></i> Send via WhatsApp</a>
+            </div>
+          `;
+        }, 300);
         // Finalize order
         cart.completeOrder();
       });
