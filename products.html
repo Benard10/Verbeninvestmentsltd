@@ -2734,7 +2734,7 @@
           Phone: <strong>0722613844</strong>
               </div>
             </div>
-            
+
             <div class="payment-option" data-value="cash">
               <input type="radio" name="paymentMethod" value="cash" id="cashPayment">
               <label for="cashPayment">
@@ -2751,7 +2751,7 @@
             <i class="fa-solid fa-check"></i> Complete Your Order
           </button>
 
-                    
+
           <div class="cart-buttons">
             <button class="cart-btn btn-back" id="backToDelivery">
               <i class="fas fa-arrow-left"></i> Back to Delivery Info
@@ -2770,7 +2770,7 @@
           </p>
           <div style="margin: 18px 0 0 0; text-align: center;">
             <a href="https://wa.me/254722613844?text=Hi%2C%20I%20just%20placed%20an%20order%20on%20your%20website.%20My%20order%20is%20complete." target="_blank" style="display:inline-block; background:#25D366; color:white; padding:12px 28px; border-radius:8px; font-weight:600; text-decoration:none; font-size:1.1rem; margin-top:8px;">
-              <i class="fab fa-whatsapp"></i> Optional WhatsApp Checkout
+              <i class="fab fa-whatsapp"></i> WhatsApp Us Your Order
             </a>
             <div style="font-size:0.95rem; color:#333; margin-top:6px;"> WhatsApp checkout is optional but provides faster processing and delivery of your order.</div>
           </div>
@@ -2778,7 +2778,7 @@
           <div class="order-details">
             <div class="order-detail">
               <span class="detail-label">Order ID:</span>
-              <span id="orderId">VB-<span id="orderNumber">2025-0001</span></span>
+              <span id="orderId">VB-<span id="orderNumber"></span></span>
             </div>
             <div class="order-detail">
               <span class="detail-label">Total Amount:</span>
@@ -2793,13 +2793,12 @@
               <span id="orderPaymentMethod">Till Number</span>
             </div>
           </div>
-          
-          <button class="btn-checkout" id="closeAfterOrder">
+          <button class="cart-btn btn-next" id="closeAfterOrder" style="width: 100%; justify-content: center; margin-top: 20px;">
             <i class="fas fa-shopping-bag"></i> Continue Shopping
           </button>
         </div>
         
-        <!-- Empty Cart Message will be rendered dynamically by JavaScript -->
+        <!-- Empty Cart Message will be rendered dynamically by JavaScript --><!-- The rest of your HTML remains the same -->
         <div id="emptyCartMessageContainer"></div>
             </div>
           </div>
@@ -3030,26 +3029,15 @@
           document.getElementById('orderAddress').textContent = address;
         }
 
-        // Show confirmation
-        document.getElementById('orderConfirmation').classList.add('active');
-        document.querySelectorAll('.cart-step').forEach(el => el.style.display = 'none');
-
-        // Reset form
-        document.getElementById('fullName').value = '';
-        document.getElementById('email').value = '';
-        document.getElementById('phone').value = '';
-        document.getElementById('estate').value = '';
-        document.getElementById('ward').value = '';
-        document.getElementById('subCounty').value = '';
-        document.getElementById('county').value = '';
-
-        // Clear cart
-        this.items = [];
-        this.saveCart();
-        this.updateCartCount();
-
-        // Reset steps
-        this.currentStep = 1;
+        // You might want to clear these fields after a successful checkout
+          // Reset form
+          document.getElementById('fullName').value = '';
+          document.getElementById('email').value = '';
+          document.getElementById('phone').value = '';
+          document.getElementById('estate').value = '';
+          document.getElementById('ward').value = '';
+          document.getElementById('subCounty').value = '';
+          document.getElementById('county').value = '';
       }
     };
 
@@ -3338,22 +3326,20 @@ function openWhatsApp(event, phone, message) {
     };
   }
   function formatOrderForWhatsApp(items, info) {
-    let msg = '*Verben Investments Order*%0A';
-    msg += '%0A*Items:*%0A';
-    items.forEach((item, i) => {
-      msg += `${i+1}. ${item.name} x${item.quantity} - KES ${item.price * item.quantity}%0A`;
-    });
-    msg += `%0A*Delivery Info:*%0A`;
-    msg += `Name: ${info.name}%0A`;
-    msg += `Email: ${info.email}%0A`;
-    msg += `Phone: ${info.phone}%0A`;
-    msg += `County: ${info.county}%0A`;
-    msg += `Sub-county: ${info.subCounty}%0A`;
-    msg += `Ward: ${info.ward}%0A`;
-    msg += `Estate: ${info.estate}%0A`;
-    if(info.instructions) msg += `Instructions: ${info.instructions}%0A`;
-    return msg;
-  }
+  let msg = '*Verben Investments Order*%0A';
+  msg += '%0A*Items:*%0A';
+  items.forEach((item, i) => {
+    msg += `${i+1}. ${item.name} x${item.quantity} - KES ${item.price * item.quantity}%0A`;
+  });
+  msg += `%0A*Subtotal:* KES ${cart.calculateTotal().toLocaleString()}%0A`;
+  msg += `%0A*Name:* ${info.name}%0A`;
+  msg += `%0A*Phone:* ${info.phone}%0A`;
+  msg += `%0A*Email:* ${info.email}%0A`;
+  msg += `%0A*Address:* ${info.estate}, ${info.ward}, ${info.subCounty}, ${info.county}%0A`;
+  msg += `%0A*Instructions:* ${info.instructions || 'None'}%0A`;
+  msg += `%0A*Order Number:* ${orderNumber}%0A`;
+  return msg;
+}
   document.addEventListener('DOMContentLoaded', function() {
     var btn = document.getElementById('whatsappCheckoutBtn');
     if (btn) {
@@ -3370,8 +3356,12 @@ function openWhatsApp(event, phone, message) {
         }
         var message = formatOrderForWhatsApp(items, info);
         var phone = '254722613844';
-        var url = `https://wa.me/${phone}?text=${message}`;
+        var url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`;
         window.open(url, '_blank');
+        // Send the correct WhatsApp message with the order details
+        var correctMessage = `Hi, I just placed an order on your website. My order details are: ${message}`;
+        var correctUrl = `https://wa.me/${phone}?text=${encodeURIComponent(correctMessage)}`;
+        window.open(correctUrl, '_blank');
       });
     }
   });
